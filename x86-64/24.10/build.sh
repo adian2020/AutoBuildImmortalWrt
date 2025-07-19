@@ -48,6 +48,18 @@ echo 'src-git qmodem https://github.com/FUjr/QModem.git;main' >> feeds.conf.defa
 # ./scripts/feeds install -a -f -p qmodem
 echo "✅ QModem feed 已添加并安装"
 
+# ============= 使用 sed 确保 QModem 在 .config 中被选中 (替代方法)==============
+# 以下 sed 命令是基于常见的 OpenWrt .config 结构。
+# 如果编译失败，您可能需要检查实际生成的 .config 文件来调整这些命令。
+
+# 激活 luci-app-qmodem
+sed -i 's/# CONFIG_PACKAGE_luci-app-qmodem is not set/CONFIG_PACKAGE_luci-app-qmodem=y/' .config
+
+# 确保 LuCI 应用框架被选中（如果尚未选中）
+sed -i 's/# CONFIG_PACKAGE_luci is not set/CONFIG_PACKAGE_luci=y/' .config
+
+echo "✅ .config 已通过 sed 修改，尝试选中 QModem"
+
 # 输出调试信息
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 开始构建固件..."
 
