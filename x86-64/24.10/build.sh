@@ -39,6 +39,15 @@ else
   ls -lah /home/build/immortalwrt/packages/
 fi
 
+# ============= 添加 QModem feed 并安装==============
+echo "🔄 正在添加 QModem 软件仓库"
+echo 'src-git qmodem https://github.com/FUjr/QModem.git;main' >> feeds.conf.default
+./scripts/feeds update qmodem
+./scripts/feeds install -a -p qmodem
+# (Optional) Force install to overwrite existing drivers/apps
+# ./scripts/feeds install -a -f -p qmodem
+echo "✅ QModem feed 已添加并安装"
+
 # 输出调试信息
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 开始构建固件..."
 
@@ -62,6 +71,9 @@ PACKAGES="$PACKAGES luci-i18n-samba4-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-filemanager-zh-cn"
 # 静态文件服务器dufs(推荐)
 PACKAGES="$PACKAGES luci-i18n-dufs-zh-cn"
+
+PACKAGES="$PACKAGES luci-app-qmodem" # **<<<<< 在这里添加 QModem >>>>>**
+
 # ======== shell/custom-packages.sh =======
 # 合并imm仓库以外的第三方插件
 PACKAGES="$PACKAGES $CUSTOM_PACKAGES"
